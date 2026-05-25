@@ -8,14 +8,14 @@ AppSupportURL=https://github.com/NandanaMD/repo-bell/issues
 DefaultDirName={autopf}\Repo Bell
 DefaultGroupName=Repo Bell
 DisableProgramGroupPage=yes
-LicenseFile=installer\terms_and_conditions.txt
-OutputDir=installer\output
+LicenseFile=terms_and_conditions.txt
+OutputDir=output
 OutputBaseFilename=RepoBellSetup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
-SetupIconFile=assets\icon.ico
+SetupIconFile=..\assets\icon.ico
 UninstallDisplayIcon={app}\RepoBell.exe
 ArchitecturesInstallIn64BitMode=x64compatible
 
@@ -27,7 +27,7 @@ Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "A
 Name: "startwithwindows"; Description: "Start Repo Bell with Windows"; GroupDescription: "Additional options:"; Flags: unchecked
 
 [Files]
-Source: "dist\RepoBell.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\RepoBell.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\Repo Bell"; Filename: "{app}\RepoBell.exe"; IconFilename: "{app}\RepoBell.exe"

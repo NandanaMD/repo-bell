@@ -24,6 +24,7 @@ from app.storage.activity_feed import ActivityFeed
 from app.storage.state_store import ActivityItem, StateStore
 from app.tray.tray_app import TrayApp
 from app.utils.paths import data_dir, logs_dir
+from app.utils.windows_app import set_process_app_id
 from app.webhook.server import WebhookServer
 
 logger = logging.getLogger(__name__)
@@ -317,6 +318,7 @@ def ensure_data_paths() -> None:
 
 
 if __name__ == "__main__":
+    set_process_app_id("RepoBell.Desktop")
     ensure_data_paths()
     app = RepoBellApplication()
     app.run()

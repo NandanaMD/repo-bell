@@ -6,6 +6,26 @@ It is designed to be simple for daily use: install, add repos, and start getting
 
 ---
 
+## Prerequisites
+
+Required:
+
+- Windows 10 or Windows 11
+- Python 3.11+
+- Internet access to GitHub API
+
+For development/build:
+
+- `pip` (included with Python)
+- PyInstaller (`pip install pyinstaller`) for EXE packaging
+- Inno Setup 6 (optional, for installer creation)
+
+Recommended:
+
+- A GitHub Personal Access Token for higher API limits and private repositories
+
+---
+
 ## 2-Minute Quick Start (Recommended)
 
 This path uses **polling mode** and requires no webhook setup.
@@ -235,6 +255,14 @@ Installer includes:
 3. Click Compile
 
 Output installer: `installer/output/RepoBellSetup.exe`
+
+### One-command build
+
+```powershell
+build_installer.bat
+```
+
+This script builds both `dist\RepoBell.exe` and `installer/output/RepoBellSetup.exe`.
 
 ---
 
