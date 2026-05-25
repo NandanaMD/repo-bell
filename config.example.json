@@ -1,0 +1,22 @@
+{
+  "mode": "polling",
+  "poll_interval": 60,
+  "webhook": {
+    "enabled": true,
+    "port": 8080,
+    "secret": "",
+    "polling_fallback": false
+  },
+  "repositories": [
+    {
+      "owner": "microsoft",
+      "repo": "vscode",
+      "token": "",
+      "enabled": true
+    }
+  ],
+  "notify_users": [],
+  "sound_notification": true,
+  "start_with_windows": true,
+  "log_level": "INFO"
+}
