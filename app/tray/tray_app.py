@@ -13,6 +13,7 @@ from app.dashboard.ui_models import DashboardRow
 from app.github.models import GitHubEvent
 from app.tray.icon_factory import build_tray_icon
 from app.tray.settings_window import SettingsWindow
+from app.utils.paths import icon_path
 
 logger = logging.getLogger(__name__)
 
@@ -39,11 +40,12 @@ class TrayApp:
         self._on_exit = on_exit
         self._logs_path = logs_path
         self._config_path = config_path
+        self._icon_path = icon_path()
 
-        self._dashboard = DashboardWindow()
+        self._dashboard = DashboardWindow(icon_file=self._icon_path)
         self._dashboard_thread: threading.Thread | None = None
         self._latest_rows: list[DashboardRow] = []
-        self._settings = SettingsWindow(on_save=self._on_save_config)
+        self._settings = SettingsWindow(on_save=self._on_save_config, icon_file=self._icon_path)
         self._settings_thread: threading.Thread | None = None
 
         self._icon = pystray.Icon(

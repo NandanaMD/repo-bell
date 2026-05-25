@@ -4,6 +4,7 @@ import logging
 import queue
 import tkinter as tk
 import webbrowser
+from pathlib import Path
 from tkinter import ttk
 
 from app.dashboard.commit_table import CommitTable
@@ -15,11 +16,12 @@ logger = logging.getLogger(__name__)
 class DashboardWindow:
     """Tkinter-based lightweight activity dashboard."""
 
-    def __init__(self) -> None:
+    def __init__(self, icon_file: Path | None = None) -> None:
         self._queue: "queue.Queue[tuple[str, list[DashboardRow] | None]]" = queue.Queue()
         self._thread = None
         self._root: tk.Tk | None = None
         self._table: CommitTable | None = None
+        self._icon_file = icon_file
 
     def show(self, initial_rows: list[DashboardRow]) -> None:
         if self._root is not None:
@@ -31,6 +33,7 @@ class DashboardWindow:
         self._root.geometry("1080x420")
         self._root.configure(bg="#171a1f")
         self._root.protocol("WM_DELETE_WINDOW", self._on_close)
+        self._apply_icon()
 
         style = ttk.Style(self._root)
         try:
@@ -85,3 +88,13 @@ class DashboardWindow:
     def _on_close(self) -> None:
         if self._root:
             self._root.withdraw()
+
+    def _apply_icon(self) -> None:
+        if not self._root or self._icon_file is None:
+            return
+        if not self._icon_file.exists():
+            return
+        try:
+            self._root.iconbitmap(default=str(self._icon_file))
+        except tk.TclError as exc:
+            logger.warning("Failed to apply dashboard icon: %s", exc)

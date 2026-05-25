@@ -1,9 +1,22 @@
 from __future__ import annotations
 
+import logging
+
 from PIL import Image, ImageDraw
+
+from app.utils.paths import icon_path
+
+logger = logging.getLogger(__name__)
 
 
 def build_tray_icon() -> Image.Image:
+    icon_file = icon_path()
+    if icon_file.exists():
+        try:
+            return Image.open(icon_file)
+        except OSError as exc:
+            logger.warning("Failed to load icon file %s: %s", icon_file, exc)
+
     size = 64
     image = Image.new("RGBA", (size, size), (26, 28, 34, 255))
     draw = ImageDraw.Draw(image)

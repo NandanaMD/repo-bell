@@ -41,6 +41,7 @@ That is all you need for normal usage.
 - Multi-repository support with per-repo enable toggle
 - Built-in activity dashboard (latest 10 events)
 - Green highlight for the most recent event
+- Shared app icon (`assets/icon.ico`) across tray, windows, and toasts
 - Duplicate prevention persisted in `data/state.json`
 - Rotating logs in `data/logs/`
 - Optional startup with Windows
@@ -204,7 +205,7 @@ Event flow:
 Build command:
 
 ```powershell
-pyinstaller --onefile --noconsole --icon=assets/icon.ico app/main.py
+pyinstaller --onefile --noconsole --icon=assets/icon.ico --add-data "assets;assets" app/main.py
 ```
 
 Or run:
@@ -214,6 +215,26 @@ build.bat
 ```
 
 Output: `dist\RepoBell.exe`
+
+---
+
+## Windows Installer (Inno Setup)
+
+Repo Bell includes an Inno Setup script at `installer/RepoBell.iss`.
+
+Installer includes:
+
+- Terms and Conditions page (`installer/terms_and_conditions.txt`)
+- Task checkbox: `Create desktop icon`
+- Task checkbox: `Start Repo Bell with Windows`
+
+### Build installer
+
+1. Build executable first (`dist\RepoBell.exe`)
+2. Open `installer/RepoBell.iss` in Inno Setup Compiler
+3. Click Compile
+
+Output installer: `installer/output/RepoBellSetup.exe`
 
 ---
 

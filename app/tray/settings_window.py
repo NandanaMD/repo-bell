@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import queue
 import tkinter as tk
+from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import Callable
 
@@ -16,9 +17,10 @@ SaveCallback = Callable[[AppConfig], None]
 class SettingsWindow:
     """Lightweight in-app configuration editor."""
 
-    def __init__(self, on_save: SaveCallback) -> None:
+    def __init__(self, on_save: SaveCallback, icon_file: Path | None = None) -> None:
         self._on_save = on_save
         self._queue: "queue.Queue[tuple[str, AppConfig | None]]" = queue.Queue()
+        self._icon_file = icon_file
 
         self._root: tk.Tk | None = None
         self._repo_table: ttk.Treeview | None = None
@@ -52,6 +54,7 @@ class SettingsWindow:
         self._root.geometry("980x620")
         self._root.configure(bg="#171a1f")
         self._root.protocol("WM_DELETE_WINDOW", self._hide)
+        self._apply_icon()
         self._init_variables()
 
         style = ttk.Style(self._root)
@@ -354,3 +357,13 @@ class SettingsWindow:
     def _hide(self) -> None:
         if self._root:
             self._root.withdraw()
+
+    def _apply_icon(self) -> None:
+        if not self._root or self._icon_file is None:
+            return
+        if not self._icon_file.exists():
+            return
+        try:
+            self._root.iconbitmap(default=str(self._icon_file))
+        except tk.TclError as exc:
+            logger.warning("Failed to apply settings icon: %s", exc)
