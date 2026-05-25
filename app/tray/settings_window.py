@@ -6,6 +6,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import Callable
+from urllib.parse import urlparse
 
 from app.config.models import AppConfig, RepositoryConfig, WebhookConfig
 
@@ -291,11 +292,42 @@ class SettingsWindow:
         token = self._sv(self._repo_token_var).get().strip()
         enabled = self._bv(self._repo_enabled_var).get()
 
+        owner, repo = self._normalize_repo_input(owner, repo)
+
         if not owner or not repo:
             messagebox.showerror("Repo Bell", "Repository owner and name are required.")
             return None
 
         return RepositoryConfig(owner=owner, repo=repo, token=token, enabled=enabled)
+
+    def _normalize_repo_input(self, owner: str, repo: str) -> tuple[str, str]:
+        repo_value = repo.strip()
+
+        if repo_value.startswith("http://") or repo_value.startswith("https://"):
+            parsed = urlparse(repo_value)
+            host = parsed.netloc.lower()
+            if "github.com" not in host:
+                messagebox.showerror("Repo Bell", "Only GitHub repository URLs are supported.")
+                return "", ""
+
+            parts = [part for part in parsed.path.split("/") if part]
+            if len(parts) < 2:
+                messagebox.showerror("Repo Bell", "Invalid GitHub repository URL.")
+                return "", ""
+
+            parsed_owner = parts[0]
+            parsed_repo = parts[1].removesuffix(".git")
+            return parsed_owner, parsed_repo
+
+        if "/" in repo_value and not owner:
+            parts = [part.strip() for part in repo_value.split("/", maxsplit=1)]
+            if len(parts) == 2 and parts[0] and parts[1]:
+                return parts[0], parts[1]
+
+        if repo_value.endswith(".git"):
+            repo_value = repo_value[: -len(".git")]
+
+        return owner, repo_value
 
     def _clear_repo_editor(self) -> None:
         self._sv(self._repo_owner_var).set("")
